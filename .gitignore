@@ -16,6 +16,7 @@ oh_modules/
 .hvigor/
 
 # Local config
+.sign/
 local.properties
 entry/.test/
 build-profile.json5
