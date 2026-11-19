@@ -19,6 +19,7 @@ ClipLink（中文名：**云剪**）乃 **SyncClipboard 生态之 HarmonyOS 客�
 - HarmonyOS 三页签结构：Home / History / Settings
 - 当前剪贴板预览（文字 / 图片）
 - 上传、下载、前台 Auto Sync
+- 桌面入口：服务卡片与快捷方式，一键上传 / 下载，无需打开主界面
 - 历史记录同步、图片预览、点击复制、图片保存
 - 本地配置持久化
 - Light / Dark / Auto 主题
@@ -80,12 +81,37 @@ hdc install -r entry/build/default/outputs/default/entry-default-signed.hap
 hdc shell aa start -a EntryAbility -b com.xiebaiyuan.syncclipboard.harmony
 ```
 
+亦可使用一键脚本（Windows + Git Bash），自动挑设备、签名、安装并启动：
+
+```bash
+./scripts/build-install-win.sh          # 增量构建
+./scripts/build-install-win.sh -clean   # 全量构建
+```
+
+### 桌面入口（卡片与快捷方式）
+
+应用提供两个无需打开主界面的入口：
+
+| 入口 | 添加方式 | 行为 |
+| --- | --- | --- |
+| 服务卡片「云剪」 | 长按应用图标 →「卡片」→「添加至桌面」 | 点「上传」或「下载」，后台执行后回写状态（如「已复制 21:14」） |
+| 快捷方式 | 长按应用图标，于弹出菜单中点选「上传剪贴板 / 下载剪贴板」 | 立即最小化主窗口并后台执行，完成后震动反馈 |
+
+技术取舍：HarmonyOS 的桌面快捷方式（`shortcuts_config.json`）其 `wants` 仅可指向 `UIAbility`，故必经窗口与系统过渡动画；服务卡片则走 `FormExtensionAbility`，点击事件在卡片进程内由 `onFormEvent` 处理，全程不建窗口，故为首选入口。
+
+两点须知：
+
+- 覆盖安装 HAP 后桌面卡片会消失，需重新添加。
+- 卡片进程无 UI，`requestPermissionsFromUser` 必然失败（401），故 `ClipboardUtil` 改以 `bundleManager` + `checkAccessToken` 预检读剪贴板权限，已授权则直接读取。
+
 ## 项目结构
 
 ```text
 AppScope/                        应用级资源
-entry/src/main/ets/entryability  HarmonyOS 入口能力
+entry/src/main/ets/entryability  HarmonyOS 入口能力（EntryAbility / ShortcutAbility）
 entry/src/main/ets/pages/        Home / History / Settings
+entry/src/main/ets/widget/       桌面服务卡片 UI
+entry/src/main/ets/formability/  桌面上传 / 下载扩展能力（FormExtensionAbility）
 entry/src/main/ets/services/     服务端通信、本地存储、轮询
 entry/src/main/ets/utils/        主题、剪贴板、图片等工具
 entry/src/main/resources/        模块资源与本地化文案
