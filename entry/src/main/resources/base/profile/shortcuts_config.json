@@ -1,0 +1,34 @@
+{
+  "shortcuts": [
+    {
+      "shortcutId": "clip_upload",
+      "label": "$string:shortcut_upload_label",
+      "icon": "$media:shortcut_upload",
+      "wants": [
+        {
+          "bundleName": "com.xiebaiyuan.syncclipboard.harmony",
+          "moduleName": "entry",
+          "abilityName": "ShortcutAbility",
+          "parameters": {
+            "clipAction": "upload"
+          }
+        }
+      ]
+    },
+    {
+      "shortcutId": "clip_download",
+      "label": "$string:shortcut_download_label",
+      "icon": "$media:shortcut_download",
+      "wants": [
+        {
+          "bundleName": "com.xiebaiyuan.syncclipboard.harmony",
+          "moduleName": "entry",
+          "abilityName": "ShortcutAbility",
+          "parameters": {
+            "clipAction": "download"
+          }
+        }
+      ]
+    }
+  ]
+}

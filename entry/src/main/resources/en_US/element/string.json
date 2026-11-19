@@ -11,6 +11,34 @@
     {
       "name": "EntryAbility_label",
       "value": "ClipLink"
+    },
+    {
+      "name": "shortcut_upload_label",
+      "value": "Upload Clipboard"
+    },
+    {
+      "name": "shortcut_download_label",
+      "value": "Download Clipboard"
+    },
+    {
+      "name": "shortcut_ability_desc",
+      "value": "Runs desktop shortcut actions without showing the app"
+    },
+    {
+      "name": "shortcut_vibrate_reason",
+      "value": "Vibrate to report the shortcut result"
+    },
+    {
+      "name": "card_display_name",
+      "value": "ClipLink Quick Sync"
+    },
+    {
+      "name": "card_description",
+      "value": "Upload or download clipboard in one tap"
+    },
+    {
+      "name": "form_desc",
+      "value": "Clipboard quick action card"
     }
   ]
 }

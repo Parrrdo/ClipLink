@@ -28,7 +28,40 @@
           }
         ],
         "startWindowIcon": "$media:app_icon",
-        "startWindowBackground": "$color:start_window_background"
+        "startWindowBackground": "$color:start_window_background",
+        "metadata": [
+          {
+            "name": "ohos.ability.shortcuts",
+            "resource": "$profile:shortcuts_config"
+          }
+        ]
+      },
+      {
+        "name": "ShortcutAbility",
+        "srcEntry": "./ets/entryability/ShortcutAbility.ets",
+        "description": "$string:shortcut_ability_desc",
+        "label": "$string:EntryAbility_label",
+        "exported": true,
+        "launchType": "singleton",
+        "process": ":shortcut",
+        "removeMissionAfterTerminate": true,
+        "startWindowIcon": "$media:transparent_pixel",
+        "startWindowBackground": "$color:shortcut_transparent"
+      }
+    ],
+    "extensionAbilities": [
+      {
+        "name": "ClipLinkFormAbility",
+        "srcEntry": "./ets/formability/ClipLinkFormAbility.ets",
+        "description": "$string:form_desc",
+        "type": "form",
+        "exported": true,
+        "metadata": [
+          {
+            "name": "ohos.extension.form",
+            "resource": "$profile:form_config"
+          }
+        ]
       }
     ],
     "requestPermissions": [
@@ -37,7 +70,18 @@
         "reason": "$string:internet_reason",
         "usedScene": {
           "abilities": [
-            "EntryAbility"
+            "EntryAbility",
+            "ShortcutAbility"
+          ],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.VIBRATE",
+        "reason": "$string:shortcut_vibrate_reason",
+        "usedScene": {
+          "abilities": [
+            "ShortcutAbility"
           ],
           "when": "inuse"
         }
@@ -47,7 +91,8 @@
         "reason": "$string:internet_reason",
         "usedScene": {
           "abilities": [
-            "EntryAbility"
+            "EntryAbility",
+            "ShortcutAbility"
           ],
           "when": "inuse"
         }

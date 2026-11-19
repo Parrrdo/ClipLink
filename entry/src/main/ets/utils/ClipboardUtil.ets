@@ -1,5 +1,6 @@
 import pasteboard from '@ohos.pasteboard';
 import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
+import bundleManager from '@ohos.bundle.bundleManager';
 import { image } from '@kit.ImageKit';
 
 /**
@@ -16,12 +17,36 @@ export class ClipboardUtil {
     return context as Context;
   }
 
+  /**
+   * 查一下权限是否已被授予。
+   * 卡片/后台扩展进程没有界面，弹不出授权框，只能依赖用户此前在主界面里授予过的权限。
+   */
+  static async isReadPermissionGranted(): Promise<boolean> {
+    try {
+      const bundleInfo = await bundleManager.getBundleInfoForSelf(
+        bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION
+      );
+      const atManager = abilityAccessCtrl.createAtManager();
+      const status = await atManager.checkAccessToken(
+        bundleInfo.appInfo.accessTokenId,
+        'ohos.permission.READ_PASTEBOARD'
+      );
+      return status === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED;
+    } catch (error) {
+      console.warn('[ClipboardUtil] checkAccessToken error:', JSON.stringify(error));
+      return false;
+    }
+  }
+
   static async ensureReadPermission(): Promise<boolean> {
     if (ClipboardUtil.permissionPromise) {
       return await ClipboardUtil.permissionPromise;
     }
 
     ClipboardUtil.permissionPromise = (async (): Promise<boolean> => {
+      if (await ClipboardUtil.isReadPermissionGranted()) {
+        return true;
+      }
       try {
         const atManager = abilityAccessCtrl.createAtManager();
         const result = await atManager.requestPermissionsFromUser(
@@ -39,7 +64,12 @@ export class ClipboardUtil {
       }
     })();
 
-    return await ClipboardUtil.permissionPromise;
+    const granted = await ClipboardUtil.permissionPromise;
+    if (!granted) {
+      // 不缓存失败结果：用户可能在主界面授权后回到卡片再点一次
+      ClipboardUtil.permissionPromise = null;
+    }
+    return granted;
   }
 
   /**

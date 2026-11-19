@@ -11,6 +11,34 @@
     {
       "name": "EntryAbility_label",
       "value": "云剪"
+    },
+    {
+      "name": "shortcut_upload_label",
+      "value": "上传剪贴板"
+    },
+    {
+      "name": "shortcut_download_label",
+      "value": "下载剪贴板"
+    },
+    {
+      "name": "shortcut_ability_desc",
+      "value": "桌面快捷方式的后台执行能力"
+    },
+    {
+      "name": "shortcut_vibrate_reason",
+      "value": "用震动反馈快捷方式的执行结果"
+    },
+    {
+      "name": "card_display_name",
+      "value": "云剪快捷同步"
+    },
+    {
+      "name": "card_description",
+      "value": "一键上传或下载剪贴板"
+    },
+    {
+      "name": "form_desc",
+      "value": "剪贴板快捷操作卡片"
     }
   ]
 }
